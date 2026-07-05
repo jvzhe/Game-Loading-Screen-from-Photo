@@ -6,3 +6,6 @@ homepage_audit_before-*.png
 framemotion_*_after_upgrade-*.png
 framemotion_*_verified-*.png
 seo-optimization-report.md
+
+.vercel
+.env*
