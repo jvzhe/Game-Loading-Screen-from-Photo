@@ -1,0 +1,7 @@
+{
+  "name": "hackathon-submission",
+  "private": true,
+  "scripts": {
+    "dev": "node dev-server.js"
+  }
+}
