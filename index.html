@@ -434,7 +434,38 @@
       }
 
       .hero {
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
         padding: 74px 0 44px;
+      }
+
+      .hero-background-video {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .hero-background-video::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(180deg, rgba(4, 5, 6, 0.44) 0%, rgba(4, 5, 6, 0.14) 24%, rgba(4, 5, 6, 0.42) 100%),
+          radial-gradient(circle at 66% 36%, rgba(255, 255, 255, 0.14), transparent 25rem),
+          linear-gradient(90deg, rgba(4, 5, 6, 0.8) 0%, rgba(4, 5, 6, 0.34) 32%, rgba(4, 5, 6, 0.12) 62%, rgba(4, 5, 6, 0.42) 100%);
+      }
+
+      .hero-background-video video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
+        opacity: 0.46;
+        filter: blur(0.2px) saturate(1.02) brightness(0.84) contrast(1.06);
+        transform: scale(1.02);
       }
 
       .hero.hero-static .text-flow,
@@ -463,6 +494,8 @@
       }
 
       .hero-grid {
+        position: relative;
+        z-index: 1;
         display: grid;
         grid-template-columns: minmax(0, 0.92fr) minmax(520px, 1.08fr);
         gap: 36px;
@@ -610,9 +643,8 @@
         position: absolute;
         inset: 30px;
         display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 20px;
+        align-items: flex-end;
+        justify-content: stretch;
         z-index: 1;
       }
 
@@ -675,10 +707,14 @@
 
       .hero-media .comparison-strip {
         position: relative;
-        display: block;
-        width: 100%;
+        display: flex;
+        align-items: stretch;
+        justify-content: flex-end;
+        width: fit-content;
+        max-width: 100%;
         height: 100%;
-        min-height: 520px;
+        margin-left: auto;
+        min-height: 0;
       }
 
       .hero-media .comparison-pane {
@@ -698,12 +734,12 @@
       }
 
       .hero-media [data-asset-slot="hero-generated-video"] {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
+        position: relative;
+        inset: auto;
         width: auto;
+        max-width: 100%;
         height: 100%;
+        margin-left: auto;
         aspect-ratio: 3 / 4;
         z-index: 1;
       }
@@ -1457,6 +1493,10 @@
           min-width: 48px;
           padding-inline: 10px;
         }
+
+        .hero-background-video video {
+          opacity: 0.34;
+        }
       }
 
       @media (hover: none), (pointer: coarse) {
@@ -1517,32 +1557,6 @@
           <a href="#faq" class="text-flow" data-hover-role="text" data-text-flow data-i18n="nav.faq">FAQ</a>
         </nav>
         <div class="nav-actions">
-          <div class="lang-switch" aria-label="Language switch" role="group">
-            <button
-              id="langEn"
-              class="lang-button active"
-              type="button"
-              data-lang="en"
-              data-hover-role="button"
-              aria-label="Switch to English"
-              title="English"
-              lang="en"
-            >
-              EN
-            </button>
-            <button
-              id="langZh"
-              class="lang-button"
-              type="button"
-              data-lang="zh"
-              data-hover-role="button"
-              aria-label="切换到中文"
-              title="中文"
-              lang="zh-CN"
-            >
-              中文
-            </button>
-          </div>
           <a class="nav-cta text-flow" href="#upload" data-hover-role="button" data-text-flow data-i18n="nav.cta">Try It Now</a>
         </div>
       </div>
@@ -1550,6 +1564,11 @@
 
     <main id="top">
       <section class="hero hero-static">
+        <div class="hero-background-video" aria-hidden="true">
+          <video autoplay muted loop playsinline preload="metadata">
+            <source src="./assets/videos/hero-background.mp4" type="video/mp4" />
+          </video>
+        </div>
         <div class="shell hero-grid">
           <div class="hero-copy">
             <div class="eyebrow text-flow" data-hover-role="chip" data-text-flow data-i18n="hero.eyebrow">AI VIDEO FOR GAME TEAMS</div>
@@ -1862,9 +1881,9 @@
               </div>
             </article>
             <article class="faq-item" data-hover-role="card">
-              <strong class="text-flow" data-hover-role="text" data-text-flow data-i18n="faq.q4">Do I need to reload the page when I change language?</strong>
+              <strong class="text-flow" data-hover-role="text" data-text-flow data-i18n="faq.q4">Can I change the output ratio or resolution?</strong>
               <div class="faq-answer text-flow" data-hover-role="text" data-text-flow data-i18n="faq.a4">
-                No. The site switches language instantly on the client side and stores your preference locally, so the chosen language remains active after refresh.
+                Not in this MVP. The workflow is intentionally fixed to 16:9 at 720p so the generation path stays consistent during demos and submission review.
               </div>
             </article>
           </div>
@@ -2122,9 +2141,9 @@
           "faq.q3": "Is this only for games?",
           "faq.a3":
             "No. The same system works for concept art presentations, cinematic product reveals, launch visuals, and portfolio storytelling. The game loading screen from photo angle is the clearest core use case, but not the only one.",
-          "faq.q4": "Do I need to reload the page when I change language?",
+          "faq.q4": "Can I change the output ratio or resolution?",
           "faq.a4":
-            "No. The site switches language instantly on the client side and stores your preference locally, so the chosen language remains active after refresh.",
+            "Not in this MVP. The workflow is intentionally fixed to 16:9 at 720p so the generation path stays consistent during demos and submission review.",
           "blog.title": "Guides and blog content around game loading screen from photo workflows",
           "blog.copy":
             "Search users rarely want only a tool. They also want guidance on prompts, inputs, motion style, and launch use cases. These homepage articles support that search intent and strengthen topical authority for the keyword cluster.",
@@ -2243,9 +2262,9 @@
           "faq.q3": "是不是只能用于游戏？",
           "faq.a3":
             "不是。它也适合概念图展示、产品发布、落地页头图、作品集叙事和视觉提案。只是从搜索意图上看，game loading screen from photo 是最清晰的核心场景。",
-          "faq.q4": "切换语言时需要刷新页面吗？",
+          "faq.q4": "可以修改输出比例或分辨率吗？",
           "faq.a4":
-            "不需要。语言切换在前端即时完成，并把偏好写入 localStorage，所以刷新页面后仍会保留你的选择。",
+            "当前 MVP 不提供修改。为了保证演示和评审过程稳定，生成链路固定为 16:9 和 720p。",
           "blog.title": "围绕 game loading screen from photo 的教程与博客内容",
           "blog.copy":
             "搜索用户通常不只想找工具，还会关心提示词怎么写、原图怎么选、镜头应该怎么动、以及生成后能用在哪些业务场景。这些首页内容用于承接这类搜索意图，增强主题权威性。",
@@ -2383,21 +2402,18 @@
       const resultMeta = document.getElementById("resultMeta");
       const retryButton = document.getElementById("retryButton");
       const pointerOrb = document.querySelector(".pointer-orb");
-      const langEnButton = document.getElementById("langEn");
-      const langZhButton = document.getElementById("langZh");
 
       const finePointerMedia = window.matchMedia("(hover: hover) and (pointer: fine)");
       const reducedMotionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
       const motionStateMap = new WeakMap();
       const pointerTrackedRoles = new Set(["card", "image-card", "button", "chip"]);
-      const languageStorageKey = "framemotion-language";
       const ALLOWED_UPLOAD_TYPES = new Set(["image/png", "image/jpeg", "image/webp"]);
       const MIN_IMAGE_DIMENSION = 14;
       const MAX_UPLOAD_DIMENSION = 1600;
       const MAX_UPLOAD_BYTES = 3 * 1024 * 1024;
       const UPLOAD_OUTPUT_TYPE = "image/jpeg";
 
-      let currentLanguage = window.localStorage.getItem(languageStorageKey) === "zh" ? "zh" : "en";
+      let currentLanguage = "en";
       let selectedTemplate = templates[0].id;
       let uploadedImageDataUrl = "";
       let appState = {
@@ -2419,6 +2435,13 @@
 
       function m(key, vars = {}) {
         return formatMessage(uiMessages[currentLanguage][key], vars);
+      }
+
+      function resolveLocalizedValue(value) {
+        if (value && typeof value === "object") {
+          return value[currentLanguage] ?? value.en ?? value.zh ?? "";
+        }
+        return value ?? "";
       }
 
       function getStatusLabel(status) {
@@ -2635,7 +2658,7 @@
       function applyMetaLanguage() {
         const meta = pageMeta[currentLanguage];
         document.title = meta.title;
-        document.documentElement.lang = currentLanguage === "zh" ? "zh-CN" : "en";
+        document.documentElement.lang = "en";
         document.getElementById("metaDescription").setAttribute("content", meta.description);
         document.getElementById("metaKeywords").setAttribute("content", meta.keywords);
         document.getElementById("ogTitle").setAttribute("content", meta.ogTitle);
@@ -2649,21 +2672,13 @@
 
       function applySchemaLanguage() {
         const websiteSchema = JSON.parse(document.getElementById("schemaWebsite").textContent);
-        websiteSchema.inLanguage = currentLanguage === "zh" ? "zh-CN" : "en";
+        websiteSchema.inLanguage = "en";
         websiteSchema.description = pageMeta[currentLanguage].description;
         document.getElementById("schemaWebsite").textContent = JSON.stringify(websiteSchema);
 
         const softwareSchema = JSON.parse(document.getElementById("schemaSoftware").textContent);
         softwareSchema.description = pageMeta[currentLanguage].description;
         document.getElementById("schemaSoftware").textContent = JSON.stringify(softwareSchema);
-      }
-
-      function updateLanguageButtons() {
-        [langEnButton, langZhButton].forEach((button) => {
-          const active = button.dataset.lang === currentLanguage;
-          button.classList.toggle("active", active);
-          button.setAttribute("aria-pressed", active ? "true" : "false");
-        });
       }
 
       function applyTranslations() {
@@ -2681,8 +2696,8 @@
       function renderTemplates() {
         templateGrid.innerHTML = templates
           .map((item) => {
-            const name = item.name[currentLanguage];
-            const description = item.description[currentLanguage];
+            const name = resolveLocalizedValue(item.name);
+            const description = resolveLocalizedValue(item.description);
             return `
               <button
                 class="template-card text-flow ${item.id === selectedTemplate ? "active" : ""}"
@@ -3022,7 +3037,7 @@
         const payload = {
           imageDataUrl: uploadedImageDataUrl,
           style: selectedTemplate,
-          prompt: selected.prompt + (extraPrompt ? `\n${m("promptAppend")} ${extraPrompt}` : "")
+          prompt: resolveLocalizedValue(selected.prompt) + (extraPrompt ? `\n${m("promptAppend")} ${extraPrompt}` : "")
         };
 
         try {
@@ -3121,13 +3136,11 @@
       }
 
       function applyLanguage(nextLanguage) {
-        currentLanguage = nextLanguage === "zh" ? "zh" : "en";
-        window.localStorage.setItem(languageStorageKey, currentLanguage);
+        currentLanguage = translations[nextLanguage] ? nextLanguage : "en";
         applyTranslations();
         applyMetaLanguage();
         applySchemaLanguage();
         renderTemplates();
-        updateLanguageButtons();
         renderAppState();
       }
 
@@ -3145,12 +3158,6 @@
         renderTemplates();
       });
 
-      [langEnButton, langZhButton].forEach((button) => {
-        button.addEventListener("click", () => {
-          applyLanguage(button.dataset.lang);
-        });
-      });
-
       generateButton.addEventListener("click", createTask);
       retryButton.addEventListener("click", createTask);
 
@@ -3160,7 +3167,7 @@
       syncResultSourcePreview();
       syncResultVideo();
       hydrateComparisonStills();
-      applyLanguage(currentLanguage);
+      applyLanguage("en");
 
       window.FrameMotionDebug = {
         setMockImage(dataUrl) {
